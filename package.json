@@ -1,0 +1,24 @@
+{
+  "name": "atividade1_am2",
+  "version": "1.0.0",
+  "description": "Feito para a atividade 1 da disciplina AM2",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MauroV27/am2-ap1.git"
+  },
+  "author": "Mauro Victor",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MauroV27/am2-ap1/issues"
+  },
+  "homepage": "https://github.com/MauroV27/am2-ap1#readme",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-ejs-layouts": "^2.5.1"
+  }
+}
