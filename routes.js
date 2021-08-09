@@ -3,6 +3,10 @@ const router = express.Router();
 
 router.use(express.static("public"));
 
+router.get('/', (req, res) => {
+    res.render("pages/home");
+});
+
 router.get('/home', (req, res) => {
     res.render("pages/home");
 });
