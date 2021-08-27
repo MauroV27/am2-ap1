@@ -123,7 +123,7 @@ function remove(index,link){
 
     http.send(dataToSend); //envia dados para o servidor na forma de JSON
 
-    http.onload = ()=>{ 
+    http.onload = ()=> { 
         
         //seleciona todas as tags que sejam td 
         let tr = document.querySelector(`table#list > tbody > tr[data-index-row='${index}']`);
@@ -132,12 +132,29 @@ function remove(index,link){
             tr.remove();
             // console.log(`Item ${index} removido com sucesso!`);
         } else {
-            console.log(`Erro durante a tentativa de remoção do usuário: ${_name}! Código do Erro: ${http.status}`); 
+            console.log(`Erro durante a tentativa de remoção do usuário! Código do Erro: ${http.status}`); 
         }
 
     }
 }
 
-function addUser(data){
-    console.log(data);
+function validateForm(){
+    const form_name = document.querySelector("#input-user-name");
+    const form_email = document.querySelector("#input-user-email");
+    const form_select_radio_option = document.querySelector("#userVoted");
+
+    if ( form_name.value == "" || form_name.value == null ) return alert("<span>Digite um nome valido</span>");
+    if ( form_email.value == "" || form_email.value == null ) return alert("<span>Digite um email valido</span>");
+
+    const data_to_submit = {name: " ", email: "", vote: false};
+
+    data_to_submit.name = form_name.value;
+    data_to_submit.email = form_email.value;
+    data_to_submit.vote = form_select_radio_option.value == "voted-yes" ? true : false;
+
+    console.table(data_to_submit);    
+}
+
+function list(){
+    
 }

@@ -1,34 +1,34 @@
 <%- contentFor('body')  %>
 
 <div class="jumbotron">
-    <form method="POST">
+    <form action="/register/add" method="POST" autocomplete="on">
         <h2>Cadastrar novo usuário</h2>
         <div class="form-group">
-          <label for="exampleInputPassword1">Nome</label>
-          <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Fulano de Tal" name="name" value>
+          <label for="input-user-name">Nome</label>
+          <input type="text" class="form-control" id="input-user-name" minlength=3 placeholder="Fulano de Tal" required name="name" value>
         </div>
         <div class="form-group">
-          <label for="exampleInputEmail1">Endereço de email</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" name="email" value>
+          <label for="input-user-email">Endereço de email</label>
+          <input type="email" class="form-control" id="input-user-email" minlength=5 aria-describedby="emailHelp" required placeholder="Enter email" name="email" value>
           <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
         </div>
         
         <div class="form-group" >
             <label class="form-check-label" for="userVoted">Usuário votou:</label>
             <div class="form-check" id="userVoted">
-                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                <input class="form-check-input" type="radio" name="vote" id="exampleRadios1" value="voted-no" checked>
                 <label class="form-check-label" for="exampleRadios1">
                 Não
                 </label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                <input class="form-check-input" type="radio" name="vote" id="exampleRadios2" value="voted-yes">
                 <label class="form-check-label" for="exampleRadios2">
                 Sim
                 </label>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary" onclick="addUser('teste')">Submit</button>
+        <button class="btn btn-primary">Registrar</button>
 
       </form>
 </div>

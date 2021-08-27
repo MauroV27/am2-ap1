@@ -10,8 +10,8 @@
         <thead>
         <tr>
             <th>Nome</th>
-            <th>Endereço</th>
             <th>Email</th>
+            <th>Endereço</th>
             <th>Idade</th>
             <th>Altura</th>
             <th>Vota?</th>
@@ -32,11 +32,11 @@
                     <input type="text" name="name"  class="hidden" value="<%= users[index].name %>">
                 </td>
                 <td data-index-row="<%=index%>">
-                    <span  class="show"><%= users[index].address %></span>
+                    <span  class="show"><%= users[index].email %></span>
                     <input type="text" name="address"  class="hidden" value="<%= users[index].address %>">
                 </td>
                 <td data-index-row="<%=index%>">
-                    <span  class="show"><%= users[index].email %></span>
+                    <span  class="show"><%= users[index].address %></span>
                     <input type="text" name="email"  class="hidden" value="<%= users[index].email %>">
                 </td>
                 <td data-index-row="<%=index%>">

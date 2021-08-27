@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const utils = require("./utils");
 
 router.use(express.static("public"));
 
@@ -62,27 +63,28 @@ router.post("/register/remove", (req, res) => {
     }
 });
 
-router.post("/register/add", (req, res) => {
-    // let user={name:"",email:"",address:"",heigth:"",age:"",vote:""};
+router.post("/register/add", async (req, res) => {
+    const {data_to_submit, data_status} = await utils.validateInputData(req.body);
 
-    // user.name = req.body._name;
-    // user.email = req.body._email;
-    // user.address = req.body._address;
-    // user.heigth = req.body._heigth;
-    // user.age = req.body._age;
-    // user.vote = req.body._vote;
+    if (data_status.status){
+        const user = await utils.formatData(data_to_submit);
+        users.push(user);
+        console.log("Usuário cadastrado:");
+        console.table(user);
+        
+        // res.sendStatus(200);
+        // res.status(200).json({
+        //     status:'sucess',
+        //     data: `Usuário ${user.name} foi adiocionado com sucesso!`
+        // });
 
-    // users.push(user);
-    // console.log("Usuário cadastrado: ",user);
-   
-    // res.sendStatus(200);
-    // res.status(200).json({
-    //     status:'sucess',
-    //     data: `Usuário ${user} foi adiocionado com sucesso!`
-    // });
-    console.log(req.body);
-    
-    res.render("pages/register", {users: users});
+        res.render("pages/register", {users: users});
+    } else {
+        return res.status(400).json({
+            status:'error',
+            error: `Didn't register data because a error has oured in ${data_status.message}!`
+        });
+    }
 });
 
 router.get("/register/add", (req, res) => {
