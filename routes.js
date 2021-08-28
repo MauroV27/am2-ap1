@@ -48,7 +48,7 @@ router.post("/register/remove", (req, res) => {
 
     // Remove as informações do usuario selecionado de users, assim apagando o usuario do servidor.
     const user_removed = users.splice( user_id,1);   
-    if ( user_removed.length == 0 ){
+    if ( user_removed.length != 0 ){
         // Retorna OK, caso a remoção tenha ocorrido sem problemas;
         return res.status(200).json({ 
             status:'sucess',

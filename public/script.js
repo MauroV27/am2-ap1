@@ -7,13 +7,12 @@ function update(index,link){
     let linkUpdate = tds[lenTds-1]; //retorna o conteudo da penultima td, no caso, o link de update
     let linkRemove = tds[lenTds];
 
-    let lenInputs = inputs.length; //pega numero de inputs
-
-    let button = inputs[lenInputs-1]; //cria uma conexao com o input que é do tipo button
+    //cria uma conexao com o input que é do tipo button
+    const button = document.querySelector(`td[data-index-row='${index}'] > input[type="button"]`);
 
     linkUpdate.className='hidden';
     linkRemove.className='hidden';
-    tds[lenTds-2].className='show';
+    tds[lenTds-1].className='show';
 
      //esconde todos os campos de exibição de dados do cadastro
     for(let cont=0;cont<spans.length;cont++){
@@ -25,7 +24,7 @@ function update(index,link){
     }
     //mostra os campos de preenchimento para o cadastro
     for(let cont=0;cont<inputs.length;cont++){
-        if(inputs[cont].className=="hidden"){
+        if( inputs[cont].className=="hidden" ){
             inputs[cont].className="show";
         }
     }
@@ -33,27 +32,19 @@ function update(index,link){
     //escuta se o botao foi clicado
     button.addEventListener('click',()=>{
         const http = new XMLHttpRequest(); //cria um objeto para requisição ao servidor
-        const url=link;
-        let data = {id:"",name:"",email:"",address:"",age:"",height:"",vote:""};
-        let dataToSend;
-
-
+        const data = {id:"",name:"",email:"",vote:""};
 
         http.open("POST",link,true); //abre uma comunicação com o servidor através de uma requisição POST
 
         http.setRequestHeader('Content-Type','application/json'); //constroi um cabecalho http para envio dos dados
 
-
         //preenche um objeto com o indice da linha da tabela e os valores dos campos input do tipo text
         data.id = index;
         data.name = inputs[0].value;
         data.email = inputs[1].value;
-        data.address = inputs[2].value;
-        data.age = inputs[3].value;
-        data.height = inputs[4].value;
         data.vote = inputs[5].value;
 
-        dataToSend = JSON.stringify(data); //transforma o objeto literal em uma string JSON que é a representação em string de um objeto JSON
+        const dataToSend = JSON.stringify(data); //transforma o objeto literal em uma string JSON que é a representação em string de um objeto JSON
 
         http.send(dataToSend);//envia dados para o servidor na forma de JSON
 
@@ -78,7 +69,7 @@ function update(index,link){
     
                 linkUpdate.className='show';
                 linkRemove.className='show';
-                tds[lenTds-2].className='hidden';
+                tds[lenTds-1].className='hidden';
         }
     /*
     readyState:
@@ -128,8 +119,10 @@ function remove(index,link){
         //seleciona todas as tags que sejam td 
         let tr = document.querySelector(`table#list > tbody > tr[data-index-row='${index}']`);
 
-        if (http.readyState === 4 && http.status === 200) {
-            tr.remove();
+        console.log(http.response.data[0].name);
+        if ( http.readyState === 4 && http.status === 200) {
+            // tr.remove();
+            list_users(link);
             // console.log(`Item ${index} removido com sucesso!`);
         } else {
             console.log(`Erro durante a tentativa de remoção do usuário! Código do Erro: ${http.status}`); 
@@ -155,6 +148,17 @@ function validateForm(){
     console.table(data_to_submit);    
 }
 
-function list(){
-    
+function list_users(link){
+    const http = new XMLHttpRequest(); //cria um objeto para requisição ao servidor
+
+    http.open('GET', link ,true); //abre uma comunicação com o servidor através de uma requisição POST
+    http.setRequestHeader('Content-Type','application/json'); //constroi um cabecalho http para envio dos dados
+    http.send(null);//envia dados para o servidor na forma de JSON
+
+    http.onload = ()=> { 
+        if ( http.readyState !== 4 && http.status !== 200) {
+            console.log(`Erro durante a listagem de usuários! Código do Erro: ${http.status}`); 
+        }
+
+    }
 }
