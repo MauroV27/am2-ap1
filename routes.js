@@ -5,11 +5,11 @@ const utils = require("./utils");
 router.use(express.static("public"));
 
 router.get('/', (req, res) => {
-    res.render("pages/home");
+    res.render("pages/home", {users: users});
 });
 
 router.get('/home', (req, res) => {
-    res.render("pages/home");
+    res.render("pages/home", {users: users});
 });
 
 router.get('/about', (req, res) => {
@@ -17,22 +17,19 @@ router.get('/about', (req, res) => {
 });
 
 router.get('/register', (req, res) => {
-    res.render("pages/register", {users: users});
+    res.render("pages/register", {title: "Lista de alunos", users: users});
 });
 
 router.post("/register/update", (req, res) => {
-
     const user_id = req.body.id;
 
     users[user_id].name = req.body.name; 
     users[user_id].email = req.body.email;
-    users[user_id].address = req.body.address;
-    users[user_id].age = req.body.age;
-    users[user_id].heigth = req.body.heigth;
     users[user_id].vote = req.body.vote;
     
     res.sendStatus(200); //envia mensagem 200 significando que as modificacoes foram ok
-    console.log("Dados recebidos: ", req.body);//mostra no console do servidor os dados recebidos
+    res.status(200).json({ users :users });
+    // console.log("Dados recebidos: ", req.body);//mostra no console do servidor os dados recebidos
 });
 
 router.post("/register/remove", (req, res) => {
@@ -63,7 +60,7 @@ router.post("/register/remove", (req, res) => {
     }
 });
 
-router.post("/register/add", async (req, res) => {
+router.post("/register", async (req, res) => {
     const {data_to_submit, data_status} = await utils.validateInputData(req.body);
 
     if (data_status.status){
@@ -71,12 +68,6 @@ router.post("/register/add", async (req, res) => {
         users.push(user);
         console.log("Usuário cadastrado:");
         console.table(user);
-        
-        // res.sendStatus(200);
-        // res.status(200).json({
-        //     status:'sucess',
-        //     data: `Usuário ${user.name} foi adiocionado com sucesso!`
-        // });
 
         res.render("pages/register", {users: users});
     } else {

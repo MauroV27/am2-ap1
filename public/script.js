@@ -1,5 +1,57 @@
-function update(index,link){
+function show_edit_inputs(index, show_edit = true){
+    //Essa função foi projetada para alternar a visibilidade de inputs/spans na linha com valor index
+    const spans = document.querySelectorAll(`td[data-index-row='${index}'] > span`);
+    const inputs = document.querySelectorAll(`td[data-index-row='${index}'] > input`);
+
+    const icon_buttons = document.querySelector(`td[data-index-row='${index}'] > div[id="icon-buttons"]`);
+
+    spans.forEach( (span) => {
+        span.className = show_edit ? 'hidden' : 'show';
+    });
+
+    inputs.forEach( (input) => {
+        input.className = show_edit ? 'show' : 'hidden';
+    });
+
+    icon_buttons.className = show_edit ? 'hidden' : 'show';
+}
+
+
+function update(index, link){
+    const spans = document.querySelectorAll(`td[data-index-row='${index}'] > span`);
+    const inputs = document.querySelectorAll(`td[data-index-row='${index}'] > input`);
+
+    const data_structure = {id:"",name:"",email:"",vote:""};
+
+    data_structure.id = index;
+    data_structure.name = inputs[0].value;
+    data_structure.email = inputs[1].value;
+    data_structure.vote = inputs[2].value;
+
+    const validate_status = validateForm(data_structure);
+
+    if ( validate_status.data != 0 ) {
+        const http = new XMLHttpRequest(); //cria um objeto para requisição ao servidor
+        http.open("POST",link,true); //abre uma comunicação com o servidor através de uma requisição POST
+        http.setRequestHeader('Content-Type','application/json');
+
+        //transforma o objeto literal em uma string JSON que é a representação em string de um objeto JSON
+        const dataToSend = JSON.stringify(validate_status.data);
+        http.send(dataToSend);//envia dados para o servidor na forma de JSON
+
+        http.onload = () =>{
+            show_edit_inputs(index, false);
+            // Alternar os valores dos spans para os dos inputs adicionados;
+            spans[0].innerHTML = validate_status.data.name;
+            spans[1].innerHTML = validate_status.data.email;
+            spans[2].innerHTML = validate_status.data.vote ? 'Sim' : 'Não';
+        };
+    } 
+}
+
+function last__update(index,link){
     //seleciona todas as tags que sejam td 
+    //Antiga versão do código;
     let tds = document.querySelectorAll(`td[data-index-row='${index}']`);
     let spans = document.querySelectorAll(`td[data-index-row='${index}'] > span`);
     let inputs = document.querySelectorAll(`td[data-index-row='${index}'] > input`);
@@ -42,7 +94,7 @@ function update(index,link){
         data.id = index;
         data.name = inputs[0].value;
         data.email = inputs[1].value;
-        data.vote = inputs[5].value;
+        data.vote = inputs[2].value;
 
         const dataToSend = JSON.stringify(data); //transforma o objeto literal em uma string JSON que é a representação em string de um objeto JSON
 
@@ -110,20 +162,16 @@ function remove(index,link){
 
     http.setRequestHeader('Content-Type','application/json'); //constroi um cabecalho http para envio dos dados
 
-    dataToSend = JSON.stringify({id: index}); //transforma o objeto literal em uma string JSON que é a representação em string de um objeto JSON
+    const dataToSend = JSON.stringify({id: index}); //transforma o objeto literal em uma string JSON que é a representação em string de um objeto JSON
 
     http.send(dataToSend); //envia dados para o servidor na forma de JSON
 
     http.onload = ()=> { 
-        
-        //seleciona todas as tags que sejam td 
-        let tr = document.querySelector(`table#list > tbody > tr[data-index-row='${index}']`);
 
-        console.log(http.response.data[0].name);
         if ( http.readyState === 4 && http.status === 200) {
             // tr.remove();
-            list_users(link);
-            // console.log(`Item ${index} removido com sucesso!`);
+            // list_users(link);
+            location.reload();
         } else {
             console.log(`Erro durante a tentativa de remoção do usuário! Código do Erro: ${http.status}`); 
         }
@@ -131,21 +179,19 @@ function remove(index,link){
     }
 }
 
-function validateForm(){
-    const form_name = document.querySelector("#input-user-name");
-    const form_email = document.querySelector("#input-user-email");
-    const form_select_radio_option = document.querySelector("#userVoted");
-
-    if ( form_name.value == "" || form_name.value == null ) return alert("<span>Digite um nome valido</span>");
-    if ( form_email.value == "" || form_email.value == null ) return alert("<span>Digite um email valido</span>");
+function validateForm(data_to_validate){
+    if ( data_to_validate.name == "" || data_to_validate.name == null ) return alert("<span>Digite um nome valido</span>");
+    if ( data_to_validate.email == "" || data_to_validate.email == null ) return alert("<span>Digite um email valido</span>");
 
     const data_to_submit = {name: " ", email: "", vote: false};
 
-    data_to_submit.name = form_name.value;
-    data_to_submit.email = form_email.value;
-    data_to_submit.vote = form_select_radio_option.value == "voted-yes" ? true : false;
+    data_to_submit.id = data_to_validate.id;
+    data_to_submit.name = data_to_validate.name;
+    data_to_submit.email = data_to_validate.email;
+    data_to_submit.vote = data_to_validate.vote.toLowerCase() == "sim" ? true : false;
 
-    console.table(data_to_submit);    
+    // console.table(data_to_submit);    //Visualiza os dados validados no cliente;
+    return {data: data_to_submit};
 }
 
 function list_users(link){
@@ -159,6 +205,7 @@ function list_users(link){
         if ( http.readyState !== 4 && http.status !== 200) {
             console.log(`Erro durante a listagem de usuários! Código do Erro: ${http.status}`); 
         }
+        location.reload()
 
     }
 }

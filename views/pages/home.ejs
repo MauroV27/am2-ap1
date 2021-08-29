@@ -1,7 +1,18 @@
 <%- contentFor('body')  %>
 
-<div class="jumbotron text-center">
+<div class="jumbotron">
     <h2>Página principal</h2>
-    
+
+    <p>Número de alunos cadastrados: <%=users.length%></p>
+    <p>Ultimos alunos cadastrados:</p>
+    <% const max_students = users.length > 10 ? 10 : users.length %>
+
+    <ul class="ul">
+        <% for( let index=0; index < max_students; index++ ){ %>
+            <li><span ><%= users[index].name %></span></li>
+        <% } %>
+    </ul>
+
+    <a href='/register/add' class="btn btn-default"><i class="fas fa-plus"></i> Cadastrar novo aluno</a>
 </div>
 

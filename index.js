@@ -8,18 +8,12 @@ const port = 3000;
 const users = [{
   name : "Mauro Victor",
   email : "mauro@teste.com",
-  address : "Lugar nenhum, rua imaginaria, 42",
-  age: 21,
-  height : 182,
   vote : true,
 },
 {
   name : "Fulano de Tal",
   email : "fulano@teste.com",
-  address : "Lugar nenhum, rua dos sonhos, 10",
-  age: 21,
-  height : 182,
-  vote : true,
+  vote : false,
 }];
 
 global.users = users

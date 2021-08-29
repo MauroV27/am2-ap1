@@ -14,13 +14,10 @@ function validateInputData(data){
 }
 
 function formatData(data){
-    const user={name:"",email:"",address:"",heigth:"",age:"",vote:""};
+    const user={name:"",email:"",vote:""};
 
     user.name = data.name;
     user.email = data.email;
-    user.address = data.address;
-    user.heigth = data.heigth;
-    user.age = data.age;
     user.vote = data.vote;
 
     return user;

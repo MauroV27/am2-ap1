@@ -1,7 +1,6 @@
 # Trabalho 1 de AM2 
 
-⚠️ Esse código está em desenvolvimento!
-> Essa aplicação é meramente para estudo.
+> Essa aplicação foi projetada para estudo, logo necessita de algumas revisões, principalmente, com o uso de banco de dados para ser usada em um porjeto real.
 
 ### O trabalho consciste de um sistema de cadastro de alunos para um curso fictio.
 

@@ -16,7 +16,7 @@
         </tr>
         </thead>
         <tbody>
-
+            
             <% let linkRemove="/register/remove"; %>
             <% let linkUpdate="/register/update"; %>
 
@@ -30,22 +30,22 @@
 
                 <td data-index-row="<%=index%>">
                     <span  class="show"><%= users[index].email %></span>
-                    <input type="text" name="address"  class="hidden" value="<%= users[index].email %>">
+                    <input type="email" name="email" class="hidden" value="<%= users[index].email %>">
                 </td>
 
                 <td data-index-row="<%=index%>">
-                    <span  class="show"><%= users[index].vote ? "Sim" : "Não" %></span>
-                    <input type="text" name="vote" class="hidden" value="<%= users[index].vote %>">
+                    <span  class="show"><%= users[index].vote ? 'Sim' : 'Não' %></span>
+                    <input type="text" name="vote" class="hidden" value="<%= users[index].vote ? 'Sim' : 'Não' %>">
                 </td>
 
-                <td data-index-row="<%= index %>" class="hidden">
-                    <input type="button" value="Atualizar" class="show">
-                </td>
-               
-                <td  data-index-row="<%= index %>">
-                    <div class="inline-button-list">
-                        <a onclick="update('<%= index%>','<%= linkUpdate %>')" class="show"><i class="fas fa-pen"></i></a>
-                        <a class="show" onclick="remove('<%= index %>','<%= linkRemove %>')"><i class="fas fa-trash-alt"></i></a>
+                <td data-index-row="<%= index %>">
+                    <input type="button" value="Atualizar" class="hidden" onclick="update('<%= index%>','<%= linkUpdate %>')">
+                <!-- </td>
+            
+                <td data-index-row="<%= index %>" > -->
+                    <div class="inline-button-list" id="icon-buttons" class="show">
+                        <a onclick="show_edit_inputs('<%= index%>')" class="show"><i class="fas fa-pen"></i></a>
+                        <a onclick="remove('<%= index %>','<%= linkRemove %>')" class="show"><i class="fas fa-trash-alt"></i></a>
                     </div>
                 </td>
 
