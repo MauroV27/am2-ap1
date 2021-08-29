@@ -5,11 +5,11 @@
 
     <p>Número de alunos cadastrados: <%=users.length%></p>
     <p>Ultimos alunos cadastrados:</p>
-    <% const max_students = users.length > 10 ? 10 : users.length %>
+    <% const max_students = users.length > 4 ? 4 : users.length %>
 
     <ul class="ul">
-        <% for( let index=0; index < max_students; index++ ){ %>
-            <li><span ><%= users[index].name %></span></li>
+        <% for( let index= 0; index < max_students; index++ ){ %>
+            <li><span ><%= users[ users.length - index - 1].name %></span></li>
         <% } %>
     </ul>
 

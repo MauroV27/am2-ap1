@@ -27,7 +27,7 @@ router.post("/register/update", (req, res) => {
     users[user_id].email = req.body.email;
     users[user_id].vote = req.body.vote;
     
-    res.sendStatus(200); //envia mensagem 200 significando que as modificacoes foram ok
+    // res.sendStatus(200); //envia mensagem 200 significando que as modificacoes foram ok
     res.status(200).json({ users :users });
     // console.log("Dados recebidos: ", req.body);//mostra no console do servidor os dados recebidos
 });

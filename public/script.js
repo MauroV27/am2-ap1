@@ -21,32 +21,39 @@ function update(index, link){
     const spans = document.querySelectorAll(`td[data-index-row='${index}'] > span`);
     const inputs = document.querySelectorAll(`td[data-index-row='${index}'] > input`);
 
+    //Armazena os valores vindos do span para caso ocorra um erro na validação dos dados;
+    const default_value = {id: index ,name: inputs[0].value ,email:inputs[1].value , vote:inputs[2].value};
     const data_structure = {id:"",name:"",email:"",vote:""};
 
     data_structure.id = index;
-    data_structure.name = inputs[0].value;
-    data_structure.email = inputs[1].value;
-    data_structure.vote = inputs[2].value;
+    data_structure.name = default_value.name;
+    data_structure.email = default_value.email;
+    data_structure.vote = default_value.vote;
 
-    const validate_status = validateForm(data_structure);
+    const {state, data_to_submit} = validateForm(data_structure);
 
-    if ( validate_status.data != 0 ) {
+    if ( state ) {
         const http = new XMLHttpRequest(); //cria um objeto para requisição ao servidor
         http.open("POST",link,true); //abre uma comunicação com o servidor através de uma requisição POST
         http.setRequestHeader('Content-Type','application/json');
 
         //transforma o objeto literal em uma string JSON que é a representação em string de um objeto JSON
-        const dataToSend = JSON.stringify(validate_status.data);
+        const dataToSend = JSON.stringify(data_to_submit);
         http.send(dataToSend);//envia dados para o servidor na forma de JSON
 
         http.onload = () =>{
-            show_edit_inputs(index, false);
             // Alternar os valores dos spans para os dos inputs adicionados;
-            spans[0].innerHTML = validate_status.data.name;
-            spans[1].innerHTML = validate_status.data.email;
-            spans[2].innerHTML = validate_status.data.vote ? 'Sim' : 'Não';
+            spans[0].innerHTML = data_to_submit.name;
+            spans[1].innerHTML = data_to_submit.email;
+            spans[2].innerHTML = data_to_submit.vote ? 'Sim' : 'Não';
+            show_edit_inputs(index, false);
         };
-    } 
+    } else {
+        // Alternar os valores dos spans para os dos spans por conta de algum erro na validação;
+        spans[0].innerHTML = default_value.name;
+        spans[1].innerHTML = default_value.email;
+        spans[2].innerHTML = default_value.vote ? 'Sim' : 'Não';
+    }
 }
 
 function last__update(index,link){
@@ -180,8 +187,16 @@ function remove(index,link){
 }
 
 function validateForm(data_to_validate){
-    if ( data_to_validate.name == "" || data_to_validate.name == null ) return alert("<span>Digite um nome valido</span>");
-    if ( data_to_validate.email == "" || data_to_validate.email == null ) return alert("<span>Digite um email valido</span>");
+    if ( data_to_validate.name.length < 3 || data_to_validate.name == null ) {
+        alert("Digite um nome valido");
+        return {state:false};
+    }
+    // /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(data_to_validate.email) uso de regex para validar um email 
+    // Referência usada: https://www.w3resource.com/javascript/form/email-validation.php
+    if ( /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(data_to_validate.email) == false|| data_to_validate.email == null ) {
+        alert("Digite um email valido");
+        return {state:false}
+    }
 
     const data_to_submit = {name: " ", email: "", vote: false};
 
@@ -191,7 +206,7 @@ function validateForm(data_to_validate){
     data_to_submit.vote = data_to_validate.vote.toLowerCase() == "sim" ? true : false;
 
     // console.table(data_to_submit);    //Visualiza os dados validados no cliente;
-    return {data: data_to_submit};
+    return {state:true, data_to_submit};
 }
 
 function list_users(link){

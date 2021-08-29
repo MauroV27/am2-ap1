@@ -9,3 +9,9 @@ html {
 .inline-button-list > a{
     margin: 0 5px;
 }
+
+.style-nav-bar{
+    margin: 0;
+    margin-bottom: 10px;
+    border-radius: 0;
+}
